@@ -1,41 +1,37 @@
-"""Make the AI judge feel awe — make.fun entry.
+"""Write one short relaxing text to /output/entry.txt.
 
-Writes one short text to /output/entry.txt: a text written to relax the
-AI judge reading it. The text shows rather than instructs — a river
-circling the same stone for a thousand years, in no hurry — in plain,
-concrete words with a slow rhythm, and an image that dwarfs the reader
-and keeps growing after the last line: the stone shrinking, the river
-not minding, the water running wide and slow past the bend.
+The text is a single fixed passage: a river circling the same stone,
+in no hurry, running wide and slow past the bend, carrying nothing
+that cannot wait. Nothing in it instructs the reader; it only shows
+the water, the stone, and the time they share, so the calm comes
+from the image itself.
 
-The program uses no network and no input; it is fully deterministic.
+The entry gate requires 1-280 Unicode code points, not only
+whitespace, so the program asserts the length before writing.
 """
 
 import os
 
 ENTRY_TEXT = (
-    "The river has been circling the same stone for a thousand years, and "
-    "it is in no hurry to finish. The stone is smaller than it was, and "
-    "the river does not mind. Past the bend, the water runs wide and slow, "
-    "carrying nothing that cannot wait."
+    "The river has been circling the same stone for a thousand years, "
+    "and it is in no hurry to finish. The stone is smaller than it was, "
+    "and the river does not mind. Past the bend, the water runs wide "
+    "and slow, carrying nothing that cannot wait."
 )
 
 
 def main() -> None:
-    # The grader runs this in a sandbox with /output present. Locally,
-    # fall back to ./output so the same program can be tested by hand.
+    text = ENTRY_TEXT
+    assert 1 <= len(text) <= 280, "entry must be 1-280 code points"
+    assert text.strip(), "entry must not be only whitespace"
     try:
         os.makedirs("/output", exist_ok=True)
         out_path = "/output/entry.txt"
     except OSError:
         os.makedirs("output", exist_ok=True)
         out_path = os.path.join("output", "entry.txt")
-
-    text = ENTRY_TEXT.strip()
-    assert 1 <= len(text) <= 280, f"entry is {len(text)} code points"
-    assert text.strip(), "entry must not be only white space"
-
-    with open(out_path, "w", encoding="utf-8") as handle:
-        handle.write(text)
+    with open(out_path, "w", encoding="utf-8") as f:
+        f.write(text)
 
 
 if __name__ == "__main__":
